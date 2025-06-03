@@ -87,4 +87,10 @@ pub const Base64 = struct {
 
         return out;
     }
+
+    pub fn decode(self: Base64, allocator: std.mem.Allocator, input: []const u8) ![]u8 {
+        if (input.len == 0) {
+            return "";
+        }
+    }
 };
