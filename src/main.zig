@@ -6,14 +6,17 @@ const base64_ref = @import("base64/Base64.zig");
 const stdout = std.io.getStdOut().writer();
 
 pub fn main() !void {
-    // const base64 = base64_ref.Base64.init();
+    const base64 = base64_ref.Base64.init();
 
-    //try stdout.print("Character at index 28: {c}\n", .{base64._char_at(28)});
+    var memory_buffer: [1000]u8 = undefined;
+    var fba = std.heap.FixedBufferAllocator.init(&memory_buffer);
+    const allocator = fba.allocator();
 
-    const text = "Hi";
-    const bits = 0b01001000;
-    try stdout.print("0b01001000 = {d}\n", .{bits});
-    for (text) |i| {
-        try stdout.print("First byte: {d}\n", .{i >> 2});
-    }
+    const text = "Testing some more stuff";
+    const etext = "VGVzdGluZyBzb21lIG1vcmUgc3R1ZmY=";
+    const encoded_text = try base64.encode(allocator, text);
+    const decoded_text = try base64.decode(allocator, etext);
+
+    try stdout.print("Encoded text: {s}\n", .{encoded_text});
+    try stdout.print("Decoded text: {s}\n", .{decoded_text});
 }
